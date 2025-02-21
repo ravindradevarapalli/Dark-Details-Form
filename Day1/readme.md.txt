@@ -1,0 +1,1 @@
+This simple project will show the how floating labels are working in the simple login page
