@@ -1,0 +1,95 @@
+/* styles.css */
+.bounce-ball {
+  width: 50px;
+  height: 50px;
+  background-color: #3498db;
+  border-radius: 50%;
+  margin: 50px auto;
+  animation: bounce 1s infinite;
+  animation-play-state: paused;
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-30px);
+  }
+  60% {
+    transform: translateY(-15px);
+  }
+}
+
+.bounce-ball.active {
+  animation-play-state: running;
+}
+
+.hover-container {
+  position: relative;
+  width: 300px;
+  margin: 20px auto;
+}
+
+.hover-container img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.hover-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.hover-container:hover .hover-text {
+  opacity: 1;
+}
+
+.accordion-item {
+  margin: 10px 0;
+}
+
+.accordion-title {
+  width: 100%;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.accordion-content.active {
+  max-height: 200px;
+}
+
+dialog {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
