@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Boids in Rotating Hexagon</title>
+
+    <!-- Minimal styling to remove default margins/padding -->
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* Prevent scrollbars if canvas slightly overflows */
+        background-color: #333; /* Match p5 sketch background color */
+      }
+      /* Ensure canvas takes up the space and is block level */
+      canvas {
+        display: block;
+      }
+    </style>
+
+    <!-- Link to the p5.js library (using a CDN) -->
+    <!-- Make sure this line comes BEFORE your sketch.js file -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.1/p5.js"></script>
+    <!-- Optional: If you ever add sound features, include p5.sound -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.1/addons/p5.sound.min.js"></script> -->
+  </head>
+  <body>
+    <!-- Link to your sketch file -->
+    <!-- This file should contain the Boid class and setup/draw functions -->
+    <script src="sketch.js"></script>
+  </body>
+</html>

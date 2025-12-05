@@ -40,3 +40,4 @@ function flipDigit(flipCard, newValue) {
 
 // Call updateClock every second
 setInterval(updateClock, 1000);
+updateClock();

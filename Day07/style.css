@@ -1,0 +1,36 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center horizontally */
+  height: 100vh; /* Full viewport height for vertical centering */
+}
+
+.loader {
+  font-size: 24px;
+  font-weight: bold;
+  color: #0000;
+  animation: loader-animation 1s infinite alternate linear;
+  background: radial-gradient(circle closest-side, #000 94%, #0000)
+    right/calc(200% - 1em) 100%;
+  text-align: center; /* Ensure text alignment */
+  line-height: 1; /* Adjust line height for better centering */
+}
+
+.loader::before {
+  content: "Loading...";
+  background: inherit;
+  background-clip: text;
+  background-image: radial-gradient(circle closest-side, #fff 94%, #000);
+  display: inline-block; /* Ensure proper centering */
+}
+
+@keyframes loader-animation {
+  100% {
+    background-position: left;
+  }
+}
