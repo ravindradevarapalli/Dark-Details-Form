@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motivational Quote Generator</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="theme-toggle">
+      <button id="theme-btn" class="theme-btn">🌙 Dark Mode</button>
+    </div>
+    <div class="container">
+      <div class="header">
+        <h1>Motivational Quote Generator</h1>
+        <div class="quote-stats">
+          <span id="quote-count">Total: 0</span>
+          <span id="fav-count">Favorites: 0</span>
+        </div>
+      </div>
+      <div class="category-filter">
+        <label for="category-select">Filter by Category:</label>
+        <select id="category-select">
+          <option value="all">All Quotes</option>
+          <option value="success">Success</option>
+          <option value="courage">Courage</option>
+          <option value="dreams">Dreams</option>
+          <option value="learning">Learning</option>
+        </select>
+      </div>
+      <div class="quote-container">
+        <div class="quote-text">
+          <i class="quote-icon">❝</i>
+          <p id="quote">Click the button to get your daily motivation!</p>
+        </div>
+        <div class="quote-author">
+          <p id="author">- Quote Generator</p>
+        </div>
+      </div>
+
+      <div class="button-container">
+        <button id="new-quote-btn" class="btn btn-primary">
+          Get New Quote
+        </button>
+        <button id="favorite-btn" class="btn btn-secondary">
+          ♡ Add to Favorites
+        </button>
+        <button id="share-twitter-btn" class="btn btn-secondary">
+          Share on Twitter
+        </button>
+        <button id="copy-btn" class="btn btn-secondary">📋 Copy Quote</button>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="history">History</button>
+        <button class="tab-btn" data-tab="favorites">Favorites</button>
+      </div>
+
+      <div id="history" class="tab-content active">
+        <div id="history-list" class="list-container">
+          <p class="empty-message">
+            No history yet. Generate your first quote!
+          </p>
+        </div>
+      </div>
+
+      <div id="favorites" class="tab-content">
+        <div id="favorites-list" class="list-container">
+          <p class="empty-message">
+            No favorites yet. Add quotes to favorites!
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
