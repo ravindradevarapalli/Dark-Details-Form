@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 26</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme">
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <span class="icon">✨</span>
+                <h1>MagicEdit</h1>
+            </div>
+            <p class="subtitle">Transform your product photos with AI</p>
+        </header>
+
+        <main>
+            <div class="editor-workspace">
+                <!-- Upload Zone -->
+                <div class="upload-zone" id="uploadZone">
+                    <div class="upload-content">
+                        <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <h3>Drop your image here</h3>
+                        <p>or <span class="browse-btn">browse files</span></p>
+                        <input type="file" id="fileInput" accept="image/*" hidden>
+                    </div>
+                </div>
+
+                <!-- Image Preview & Result Area (Hidden initially) -->
+                <div class="image-container hidden" id="imageContainer">
+                    <div class="preview-wrapper">
+                        <div class="image-box original">
+                            <span class="badge">Original</span>
+                            <img id="originalImage" src="" alt="Original">
+                        </div>
+                        <div class="image-box result">
+                            <span class="badge">Result</span>
+                            <div class="loading-overlay hidden" id="loadingOverlay">
+                                <div class="spinner"></div>
+                                <p>Magic is happening...</p>
+                            </div>
+                            <img id="resultImage" src="" alt="Result">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="controls-area">
+                    <div class="input-group">
+                        <input type="text" id="promptInput" placeholder="Describe what you want to change (e.g., 'Remove background', 'Add a sunset')">
+                        <button id="generateBtn" disabled>
+                            <span class="btn-text">Generate</span>
+                            <span class="btn-icon">🪄</span>
+                        </button>
+                    </div>
+                    <div class="quick-actions">
+                        <button class="chip" data-prompt="Remove background">Remove background</button>
+                        <button class="chip" data-prompt="Studio lighting">Studio lighting</button>
+                        <button class="chip" data-prompt="White background">White background</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
