@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Rotating Hexagon Physics Simulator</title>
+
+    <!-- p5.js -->
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
+
+    <style>
+      :root {
+        --bg: #f4f4f4;
+        --panel: #ffffff;
+        --ink: #111;
+        --accent: #ff3b3b;
+        --border: 4px solid #111;
+        --shadow: 8px 8px 0 #111;
+      }
+
+      * {
+        box-sizing: border-box;
+        font-family: Inter, system-ui, sans-serif;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+      }
+
+      header {
+        padding: 32px;
+        background: var(--panel);
+        border-bottom: var(--border);
+        box-shadow: var(--shadow);
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: 36px;
+      }
+
+      header p {
+        margin-top: 8px;
+        max-width: 720px;
+        font-weight: 500;
+      }
+
+      main {
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        gap: 24px;
+        padding: 32px;
+      }
+
+      .controls {
+        background: var(--panel);
+        border: var(--border);
+        box-shadow: var(--shadow);
+        padding: 24px;
+      }
+
+      .controls h2 {
+        margin-top: 0;
+        font-size: 22px;
+      }
+
+      .control-group {
+        margin-bottom: 24px;
+      }
+
+      .control-group label {
+        display: block;
+        font-weight: 700;
+        margin-bottom: 6px;
+      }
+
+      .control-group span {
+        float: right;
+        font-weight: 600;
+      }
+
+      input[type="range"] {
+        width: 100%;
+        height: 8px;
+        margin-bottom: 6px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background: #ddd;
+        border: var(--border);
+      }
+
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 24px;
+        height: 24px;
+        background: var(--accent);
+        border: var(--border);
+        cursor: pointer;
+      }
+
+      input[type="range"]::-webkit-slider-track {
+        height: 8px;
+        background: #ddd;
+        border: var(--border);
+      }
+
+      input[type="range"]::-moz-range-track {
+        height: 8px;
+        background: #ddd;
+        border: var(--border);
+      }
+
+      input[type="range"]::-moz-range-thumb {
+        -moz-appearance: none;
+        width: 24px;
+        height: 24px;
+        background: var(--accent);
+        border: var(--border);
+        cursor: pointer;
+      }
+
+      .canvas-wrap {
+        background: var(--panel);
+        border: var(--border);
+        box-shadow: var(--shadow);
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      footer {
+        padding: 24px;
+        text-align: center;
+        font-weight: 600;
+        opacity: 0.7;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>Rotating Hexagon Physics Simulator</h1>
+      <p>
+        Real-time physics experiment with gravity, friction, restitution and
+        angular energy transfer from a rotating constraint.
+      </p>
+    </header>
+
+    <main>
+      <section class="controls">
+        <h2>Controls</h2>
+
+        <div class="control-group">
+          <label>Rotation Speed <span id="rotVal"></span></label>
+          <input
+            type="range"
+            id="rotation"
+            min="-0.05"
+            max="0.05"
+            step="0.001"
+            value="0.01"
+          />
+        </div>
+
+        <div class="control-group">
+          <label>Ring Size <span id="ringVal"></span></label>
+          <input
+            type="range"
+            id="ring"
+            min="150"
+            max="320"
+            step="1"
+            value="240"
+          />
+        </div>
+
+        <div class="control-group">
+          <label>Ball Size <span id="ballVal"></span></label>
+          <input type="range" id="ball" min="8" max="30" step="1" value="14" />
+        </div>
+      </section>
+
+      <section class="canvas-wrap"></section>
+    </main>
+
+    <footer>p5.js · Constraint-based physics · Neo-brutalist UI</footer>
+
+    <script>
+      let angle = 0;
+      let balls = [];
+
+      // Ball colors - vibrant palette
+      const BALL_COLORS = [
+        "#ff3b3b", // Red
+        "#2b6cff", // Blue
+        "#00c853", // Green
+        "#ff9100", // Orange
+        "#aa00ff", // Purple
+      ];
+
+      let gravity = 0.6;
+      let friction = 0.999;
+      let restitution = 0.92;
+
+      let rotationSlider, ringSlider, ballSlider;
+
+      function setup() {
+        const canvas = createCanvas(600, 600);
+        canvas.parent(document.querySelector(".canvas-wrap"));
+
+        // Create multiple balls with different starting positions and velocities
+        for (let i = 0; i < BALL_COLORS.length; i++) {
+          let angle = (TWO_PI / BALL_COLORS.length) * i;
+          balls.push({
+            pos: createVector(cos(angle) * 50, sin(angle) * 50 - 50),
+            vel: createVector(random(-3, 3), random(-2, 2)),
+            r: 14,
+            color: BALL_COLORS[i],
+          });
+        }
+
+        rotationSlider = select("#rotation");
+        ringSlider = select("#ring");
+        ballSlider = select("#ball");
+      }
+
+      function draw() {
+        background(245);
+        translate(width / 2, height / 2);
+
+        // UI readouts
+        document.getElementById("rotVal").innerText = rotationSlider.value();
+        document.getElementById("ringVal").innerText = ringSlider.value();
+        document.getElementById("ballVal").innerText = ballSlider.value();
+
+        let ballRadius = +ballSlider.value();
+        let R = +ringSlider.value();
+        let rotSpeed = +rotationSlider.value();
+
+        angle += rotSpeed;
+
+        // Hexagon vertices (rotated)
+        let verts = [];
+        for (let i = 0; i < 6; i++) {
+          let a = angle + (TWO_PI * i) / 6;
+          verts.push(createVector(cos(a) * R, sin(a) * R));
+        }
+
+        // Update each ball
+        for (let ball of balls) {
+          ball.r = ballRadius;
+
+          // Physics integration
+          ball.vel.y += gravity;
+          ball.vel.mult(friction);
+          ball.pos.add(ball.vel);
+
+          // Collision against INSIDE walls
+          for (let i = 0; i < 6; i++) {
+            let v1 = verts[i];
+            let v2 = verts[(i + 1) % 6];
+
+            let edge = p5.Vector.sub(v2, v1);
+
+            // inward normal
+            let normal = createVector(edge.y, -edge.x).normalize();
+
+            // signed distance to edge
+            let dist = p5.Vector.sub(ball.pos, v1).dot(normal);
+
+            if (dist > -ball.r) {
+              // positional correction
+              ball.pos.sub(p5.Vector.mult(normal, dist + ball.r));
+
+              // velocity reflection
+              let vn = ball.vel.dot(normal);
+              let vt = p5.Vector.sub(ball.vel, p5.Vector.mult(normal, vn));
+
+              ball.vel = p5.Vector.sub(
+                vt,
+                p5.Vector.mult(normal, vn * restitution)
+              );
+
+              // angular energy transfer
+              let tangent = createVector(-normal.y, normal.x);
+              ball.vel.add(tangent.mult(rotSpeed * R * 0.15));
+            }
+          }
+        }
+
+        // Ball-to-ball collision
+        for (let i = 0; i < balls.length; i++) {
+          for (let j = i + 1; j < balls.length; j++) {
+            let b1 = balls[i];
+            let b2 = balls[j];
+
+            let diff = p5.Vector.sub(b2.pos, b1.pos);
+            let dist = diff.mag();
+            let minDist = b1.r + b2.r;
+
+            if (dist < minDist && dist > 0) {
+              // Collision detected - separate balls
+              let normal = diff.copy().normalize();
+              let overlap = minDist - dist;
+
+              // Push balls apart equally
+              b1.pos.sub(p5.Vector.mult(normal, overlap / 2));
+              b2.pos.add(p5.Vector.mult(normal, overlap / 2));
+
+              // Exchange velocities along collision normal (elastic collision)
+              let v1n = b1.vel.dot(normal);
+              let v2n = b2.vel.dot(normal);
+
+              // Swap normal components (equal mass elastic collision)
+              let v1nAfter = v2n * restitution;
+              let v2nAfter = v1n * restitution;
+
+              b1.vel.add(p5.Vector.mult(normal, v1nAfter - v1n));
+              b2.vel.add(p5.Vector.mult(normal, v2nAfter - v2n));
+            }
+          }
+        }
+
+        // Draw hexagon
+        stroke(0);
+        strokeWeight(4);
+        noFill();
+        beginShape();
+        verts.forEach((v) => vertex(v.x, v.y));
+        endShape(CLOSE);
+
+        // Draw all balls with shadows
+        for (let ball of balls) {
+          // Dynamic shadow - offset based on ball position for depth effect
+          // Shadow gets larger and more diffuse when ball is "higher" (more negative Y)
+          let shadowOffset = map(ball.pos.y, -R, R, 12, 4);
+          let shadowBlur = map(ball.pos.y, -R, R, ball.r * 2.5, ball.r * 1.5);
+          let shadowAlpha = map(ball.pos.y, -R, R, 40, 80);
+
+          noStroke();
+          fill(0, shadowAlpha);
+          ellipse(
+            ball.pos.x + shadowOffset,
+            ball.pos.y + shadowOffset,
+            shadowBlur,
+            shadowBlur * 0.6
+          );
+
+          // Glow effect
+          fill(255, 60);
+          circle(ball.pos.x, ball.pos.y, ball.r * 3);
+
+          // Ball with border
+          stroke(0);
+          strokeWeight(2);
+          fill(ball.color);
+          circle(ball.pos.x, ball.pos.y, ball.r * 2);
+
+          // Highlight for 3D effect
+          noStroke();
+          fill(255, 100);
+          circle(
+            ball.pos.x - ball.r * 0.3,
+            ball.pos.y - ball.r * 0.3,
+            ball.r * 0.6
+          );
+        }
+      }
+    </script>
+  </body>
+</html>
